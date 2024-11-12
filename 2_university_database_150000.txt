@@ -1,0 +1,77 @@
+Write a SQL query that returns –
+1. Create a database named &quot;university_db&quot; to store all the professor-related
+data.
+2. Create a table named &quot;professors&quot; to store professor information. The
+table should have the following columns:
+a. professor_id (Primary Key, Auto-incrementing)
+b. professor_name (NOT NULL)
+c. department (NOT NULL)
+d. salary (Numeric data type)
+3. All the departments in the table with no duplicates
+4. The no. of professors whose salary is greater than 1,50,000
+5. All departments and their aggregate salaries
+6. The name and salary of the professor with highest salary
+7. The name and salary of the professor with the highest salary in the “CS
+Department”
+8. Name and salary of the 5 highest earning professors
+9. The number of unique departments in the table
+10. All the professors name in the “Computer Science” department
+
+
+
+
+1. CREATE DATABASE university_db;
+
+
+2. USE university_db;
+
+3. CREATE TABLE professors (
+    professor_id INT AUTO_INCREMENT PRIMARY KEY,
+    professor_name VARCHAR(100) NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    salary DECIMAL(10, 2)
+);
+
+
+4. SELECT DISTINCT department
+FROM professors;
+
+
+5. SELECT COUNT(*) AS num_professors
+FROM professors
+WHERE salary > 150000;
+
+
+6. SELECT department, SUM(salary) AS total_salary
+FROM professors
+GROUP BY department;
+
+
+7. SELECT professor_name, salary
+FROM professors
+ORDER BY salary DESC
+LIMIT 1;
+
+
+8. SELECT professor_name, salary
+FROM professors
+WHERE department = 'CS'
+ORDER BY salary DESC
+LIMIT 1;
+
+
+9. SELECT professor_name, salary
+FROM professors
+ORDER BY salary DESC
+LIMIT 5;
+
+
+10. SELECT COUNT(DISTINCT department) AS unique_departments
+FROM professors;
+
+
+11. SELECT professor_name
+FROM professors
+WHERE department = 'Computer Science';
+
+

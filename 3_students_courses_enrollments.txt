@@ -1,0 +1,83 @@
+Create SQL queries for a database application that manages
+information about students and their courses. The database schema
+includes the following tables:
+students: Contains information about students
+Columns: student_id (primary key), student_name, age, gender, email
+courses: Contains information about courses
+Columns: course_id (primary key), course_name, credit_hours, department
+enrollments: Stores enrollment details of students in courses
+Columns: enrollment_id (primary key), student_id (foreign key referencing
+students table), course_id (foreign key referencing courses table),
+enrollment_date
+Write the SQL query that –
+1. Retrieve the names of all students along with their enrolled courses.
+2. Retrieve the total number of enrolled students in each course.
+3. Retrieve the student names who have not enrolled in any course.
+4. Insert a new student record into the database.
+5. Update the credit hours for the course with course_id 101.
+6. Delete the enrollment record for student_id 102 and course_id 105.
+7. Retrieve the course names and their respective departments using a
+subquery.
+8. Create a view to display the details of enrolled students and their courses.
+9. Retrieve the details of students who have enrolled in more than one course.
+10. Retrieve the course names and credit hours for all courses along with the
+names of students enrolled in each course.
+
+
+
+
+1. SELECT s.student_name, c.course_name
+FROM students s
+JOIN enrollments e ON s.student_id = e.student_id
+JOIN courses c ON e.course_id = c.course_id;
+
+
+2. SELECT c.course_name, COUNT(e.student_id) AS total_enrolled
+FROM courses c
+LEFT JOIN enrollments e ON c.course_id = e.course_id
+GROUP BY c.course_id;
+
+
+3. SELECT s.student_name
+FROM students s
+LEFT JOIN enrollments e ON s.student_id = e.student_id
+WHERE e.enrollment_id IS NULL;
+
+
+4. INSERT INTO students (student_name, age, gender, email)
+VALUES ('John Doe', 20, 'Male', 'johndoe@example.com');
+
+
+5. UPDATE courses
+SET credit_hours = 4
+WHERE course_id = 101;
+
+
+6. DELETE FROM enrollments
+WHERE student_id = 102 AND course_id = 105;
+
+
+7. SELECT course_name, 
+       (SELECT department FROM courses c WHERE c.course_id = courses.course_id) AS department
+FROM courses;
+
+
+8. CREATE VIEW enrolled_students AS
+SELECT s.student_name, c.course_name, e.enrollment_date
+FROM students s
+JOIN enrollments e ON s.student_id = e.student_id
+JOIN courses c ON e.course_id = c.course_id;
+
+
+9. SELECT s.student_name, COUNT(e.course_id) AS num_courses
+FROM students s
+JOIN enrollments e ON s.student_id = e.student_id
+GROUP BY s.student_id
+HAVING COUNT(e.course_id) > 1;
+
+
+10. SELECT c.course_name, c.credit_hours, s.student_name
+FROM courses c
+JOIN enrollments e ON c.course_id = e.course_id
+JOIN students s ON e.student_id = s.student_id;
+

@@ -1,0 +1,70 @@
+aids@aids-System-Product-Name:~$ mongo
+
+> use sample;
+switched to db sample
+> db.createCollection("product");
+
+> db.product.insertOne({prod_id:101,category:'stationary',Name:'pen',Qty:100,Amount:1000});
+
+> db.product.insertOne({prod_id:102,category:'stationary',Name:'pencil',Qty:100,Amount:1000});
+
+> db.product.insertOne({prod_id:103,category:'stationary',Name:'eraser',Qty:100,Amount:500});
+
+> db.product.insertOne({prod_id:104,category:'stationary',Name:'stapler',Qty:100,Amount:500});
+
+> db.product.insertOne({prod_id:201,category:'furniture',Name:'chair',Qty:100,Amount:1000});
+
+> db.product.insertOne({prod_id:202,category:'furniture',Name:'table',Qty:100,Amount:1000});
+
+> db.product.insertOne({prod_id:203,category:'furniture',Name:'board',Qty:100,Amount:5000});
+
+> db.product.insertOne({prod_id:204,category:'furniture',Name:'sofa',Qty:100,Amount:7000});
+
+> db.product.insertOne({prod_id:301,category:'electronics',Name:'pc',Qty:100,Amount:7000});
+
+> db.product.insertOne({prod_id:302,category:'electronics',Name:'laptops',Qty:100,Amount:25000});
+
+> db.product.insertOne({prod_id:303,category:'electronics',Name:'phone',Qty:100,Amount:15000});
+
+> db.product.find();
+
+> db.product.aggregate([{$group:{_id:'stationary',avgAmount:{$avg:"$Amount"}}}]);
+
+> db.product.aggregate([{$group:{_id:'furniture',avgAmount:{$avg:"$Amount"}}}]);
+
+> db.product.aggregate([{$group:{_id:'electronics',avgAmount:{$avg:"$Amount"}}}]);
+
+> db.product.aggregate([{$group:{_id:'$category',avgAmount:{$avg:"$Amount"}}}]);
+
+> db.product.aggregate([{$group:{_id:'$category',sumAmount:{$sum:"$Amount"}}}]);
+
+> db.product.aggregate([{$group:{_id:'$category',minAmount:{$min:"$Amount"}}}]);
+
+> db.product.aggregate([{$group:{_id:'$category',maxAmount:{$max:"$Amount"}}}]);
+
+> db.product.aggregate([{$sort:{Amount:1}},{$limit:10}]);
+
+> db.product.aggregate([{$sort:{Amount:-1}},{$limit:10}]);
+
+
+> db.product.aggregate([{$sort:{Name:1}},{$limit:10}]);
+
+> db.product.aggregate([{$sort:{Name:-1}},{$limit:10}]);
+
+> db.product.createIndex({prod_id:1});
+
+db.product.createIndex({prod_id:1});
+
+> db.product.find({prod_id:101});
+
+> db.product.find({prod_id:1});
+> var mapFunction=function(){emit(this.category,this.Amount);};
+> var reduceFunction=function(key,value){return Array.sum(value);};
+
+> db.product.mapReduce(mapFunction,reduceFunction,{out:"category_wise_Amount"});
+
+> db.category_wise_Amount.find();
+
+
+
+

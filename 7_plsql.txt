@@ -1,0 +1,100 @@
+
+SQL> connect
+Enter user-name: SYSTEM
+Enter password:
+
+
+Connected.
+
+SQL> CREATE TABLE A_roll_call(ROLL_NO INT PRIMARY KEY, NAME VARCHAR(50));
+
+Table created.
+
+SQL> CREATE TABLE B_roll_call(ROLL_NO INT PRIMARY KEY, NAME VARCHAR(50));
+
+Table created.
+
+SQL> INSERT INTO A_roll_call values(1,'Aditya');
+
+1 row created.
+
+SQL> INSERT INTO A_roll_call values(2,'Disha');
+
+1 row created.
+
+SQL> INSERT INTO A_roll_call values(3,'Gauri');
+
+1 row created.
+
+SQL> INSERT INTO B_roll_call values(3,'Gauri');
+
+1 row created.
+
+SQL> INSERT INTO B_roll_call values(4,'Manvi');
+
+1 row created.
+
+SQL> INSERT INTO B_roll_call values(5,'Navin');
+
+1 row created.
+
+SQL> INSERT INTO B_roll_call values(6,'Priyanka');
+
+1 row created.
+
+SQL> SELECT * FROM A_roll_call;
+
+   ROLL_NO NAME
+---------- --------------------------------------------------
+         1 Aditya
+         2 Disha
+         3 Gauri
+
+SQL> SELECT * FROM B_roll_call;
+
+   ROLL_NO NAME
+---------- --------------------------------------------------
+         3 Gauri
+         4 Manvi
+         5 Navin
+         6 Priyanka
+
+SQL> SET SERVEROUTPUT ON;
+SQL> DECLARE
+ 2  v_roll_no B_roll_call.roll_no%Type;
+  3  v_name B_roll_call.name%Type;
+  4  CURSOR c_new_roll_call IS
+  5  SELECT roll_no,name FROM B_roll_call;
+  6  BEGIN
+  7  FOR rec IN c_new_roll_call
+  8  LOOP
+  9  v_roll_no := rec.roll_no;
+ 10  v_name := rec.name;
+ 11  MERGE INTO A_roll_call A using(SELECT v_roll_no AS roll_no,v_name AS name FROM DUAL)B ON(A.roll_no = B.roll_no)
+ 12  WHEN NOT MATCHED THEN
+ 13  INSERT(roll_no,name)values(B.roll_no,B.name);
+ 14  commit;
+ 15  DBMS_OUTPUT.PUT_LINE('MERGED RECORD = '||v_roll_no);
+ 16  END LOOP;
+ 17  END;
+ 18  /
+MERGED RECORD = 3
+MERGED RECORD = 4
+MERGED RECORD = 5
+MERGED RECORD = 6
+
+PL/SQL procedure successfully completed.
+
+SQL> SELECT *FROM A_roll_call;
+
+   ROLL_NO NAME
+---------- --------------------------------------------------
+         1 Aditya
+         2 Disha
+         3 Gauri
+         4 Manvi
+         5 Navin
+         6 Priyanka
+
+6 rows selected.
+

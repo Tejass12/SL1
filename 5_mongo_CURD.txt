@@ -1,0 +1,16 @@
+> use assig3;
+> db.createCollection("Product")
+> db.Product.insertOne({item:'pen',qty:100});
+
+> db.Product.find();
+> db.Product.insert({item:'pencil',qty:100},{item:'table',qty:10},{item:'chair',qty:10},{item:'book',qty:50});
+
+db.Product.insertMany([{item:'pencil',qty:100},{item:'table',qty:10},{item:'chair',qty:10},{item:'book',qty:50}]);
+> db.Product.find();
+> db.Product.update({item:'pen'},{$set:{item:'scale'}});
+> db.Product.find();
+> db.Product.remove({item:'scale'});
+> db.Product.find();
+
+> db.Product.save({item:'book',qty:50});
+> db.Product.find();

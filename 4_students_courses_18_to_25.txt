@@ -1,0 +1,84 @@
+Create SQL queries for a database application that manages
+information about students and their courses. The database schema
+includes the following tables:
+students: Contains information about students
+Columns: student_id (primary key), student_name, age, gender, email
+courses: Contains information about courses
+Columns: course_id (primary key), course_name, credit_hours, department
+enrollments: Stores enrollment details of students in courses
+Columns: enrollment_id (primary key), student_id (foreign key referencing
+students table), course_id (foreign key referencing courses table), enrollment_date
+
+1. Retrieve the course names and the number of enrolled students for each
+course, ordered by the number of enrolled students in descending order.
+2. Retrieve the names of students and the number of courses they are enrolled
+in, ordered by the number of enrolled courses in descending order.
+3. Retrieve the average age of students enrolled in each course, along with the
+course names.
+4. Retrieve the names of students who are enrolled in courses offered by the
+'IT' department.
+5. Retrieve the student names and their enrolled courses for students aged
+between 18 and 25 years.
+6. Retrieve the student names and the course names they are enrolled in, sorted
+alphabetically by student names.
+7. Retrieve the student names and their enrolled courses for students whose
+email ends with '@example.com'.
+
+
+
+
+1. SELECT c.course_name, COUNT(e.student_id) AS num_enrolled
+FROM courses c
+LEFT JOIN enrollments e ON c.course_id = e.course_id
+GROUP BY c.course_id
+ORDER BY num_enrolled DESC;
+
+
+
+2. SELECT s.student_name, COUNT(e.course_id) AS num_courses
+FROM students s
+JOIN enrollments e ON s.student_id = e.student_id
+GROUP BY s.student_id
+ORDER BY num_courses DESC;
+
+
+
+3. SELECT c.course_name, AVG(s.age) AS avg_age
+FROM courses c
+JOIN enrollments e ON c.course_id = e.course_id
+JOIN students s ON e.student_id = s.student_id
+GROUP BY c.course_id;
+
+
+
+4. SELECT DISTINCT s.student_name
+FROM students s
+JOIN enrollments e ON s.student_id = e.student_id
+JOIN courses c ON e.course_id = c.course_id
+WHERE c.department = 'IT';
+
+
+
+5. SELECT s.student_name, c.course_name
+FROM students s
+JOIN enrollments e ON s.student_id = e.student_id
+JOIN courses c ON e.course_id = c.course_id
+WHERE s.age BETWEEN 18 AND 25;
+
+
+
+6. SELECT s.student_name, c.course_name
+FROM students s
+JOIN enrollments e ON s.student_id = e.student_id
+JOIN courses c ON e.course_id = c.course_id
+ORDER BY s.student_name ASC;
+
+
+
+
+7. SELECT s.student_name, c.course_name
+FROM students s
+JOIN enrollments e ON s.student_id = e.student_id
+JOIN courses c ON e.course_id = c.course_id
+WHERE s.email LIKE '%@example.com';
+

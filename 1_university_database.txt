@@ -1,0 +1,76 @@
+Write a SQL query that returns –
+a. Create a database named &quot;university_db&quot; to store all the professor-related
+data.
+b. Create a table named &quot;professors&quot; to store professor information. The table
+should have the following columns:
+a. professor_id (Primary Key, Auto-incrementing)
+b. professor_name (NOT NULL)
+c. department (NOT NULL)
+d. salary (Numeric data type)
+c. Create an index on the &quot;professor_name&quot; column
+d. Create a UNIQUE constraint on the combination of &quot;professor_name&quot; and
+&quot;department&quot;.
+e. Create a CHECK constraint on the &quot;salary&quot; column.
+f. Create a VIEW named &quot;professor_details&quot;.
+g. Insert at least 10 values in above database
+h. The department professor “ABC” works in.
+i. All the professor names that begin with letter ‘A’.
+j. All the professors name in the “Computer Science” department
+
+
+
+
+
+
+1. CREATE DATABASE university_db;
+
+
+2. USE university_db;
+
+3. CREATE TABLE professors (
+    professor_id INT AUTO_INCREMENT PRIMARY KEY,
+    professor_name VARCHAR(100) NOT NULL,
+    department VARCHAR(100) NOT NULL,
+    salary DECIMAL(10, 2),
+    CHECK (salary >= 0)
+);
+
+
+4. CREATE INDEX idx_professor_name ON professors(professor_name);
+
+
+5. ALTER TABLE professors
+ADD CONSTRAINT unique_professor_department UNIQUE (professor_name, department);
+
+
+6. CREATE VIEW professor_details AS
+SELECT professor_id, professor_name, department, salary
+FROM professors;
+
+
+7. INSERT INTO professors (professor_name, department, salary) VALUES
+('John Doe', 'Computer Science', 85000),
+('Jane Smith', 'Mathematics', 95000),
+('Alan Brown', 'Physics', 91000),
+('Maria Johnson', 'Chemistry', 88000),
+('Alice Williams', 'Computer Science', 87000),
+('David Taylor', 'Biology', 94000),
+('Susan Wilson', 'Mathematics', 99000),
+('Charles Moore', 'History', 72000),
+('Barbara Lee', 'Physics', 95000),
+('Emily Adams', 'Biology', 78000);
+
+
+8. SELECT department
+FROM professors
+WHERE professor_name = 'ABC';
+
+
+9. SELECT professor_name
+FROM professors
+WHERE professor_name LIKE 'A%';
+
+
+10. SELECT professor_name
+FROM professors
+WHERE department = 'Computer Science';
